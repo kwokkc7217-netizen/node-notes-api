@@ -1,0 +1,28 @@
+@base = http://localhost:3000
+@live = https://node-notes-api-3p1r.onrender.com
+
+### hello (local)
+GET {{base}}/api/hello?name=tom
+
+### list notes (local)
+GET {{base}}/api/notes
+
+### create note (local)
+POST {{base}}/api/notes
+Content-Type: application/json
+
+{
+  "text": "hello from vscode"
+}
+
+### get one (local)
+GET {{base}}/api/notes/2
+
+### delete (local)
+DELETE {{base}}/api/notes/2
+
+### hello (live on Render)
+GET {{live}}/api/hello?name=tom
+
+### list notes (live — 同一個 Neon DB)
+GET {{live}}/api/notes

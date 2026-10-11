@@ -1,0 +1,1 @@
+{"configurations":[{"env":{"DATABASE_URL":"${env:DATABASE_URL}","PORT":"3000"},"name":"Debug API（要先喺 terminal 設好 DATABASE_URL）","program":"${workspaceFolder}/server.js","request":"launch","skipFiles":["<node_internals>/**"],"type":"node"}],"version":"0.2.0"}
