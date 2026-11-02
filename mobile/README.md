@@ -1,7 +1,7 @@
 # Notes — Expo React Native client
 
 React Native 練習：一個 notes app，食 `node-notes-api` 條 live API
-（Express + Postgres，`https://node-notes-api-3p1r.onrender.com`）。
+（Express + Postgres，`https://node-notes-api-2he1.onrender.com`）。
 
 ## 功能
 

@@ -15,7 +15,7 @@ import {
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 
-const API_BASE = "https://node-notes-api-3p1r.onrender.com";
+const API_BASE = "https://node-notes-api-2he1.onrender.com";
 
 export default function App() {
   const [notes, setNotes] = useState([]);
