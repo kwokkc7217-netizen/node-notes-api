@@ -3,9 +3,11 @@
 // 同之前個 Java 版 /api/hello 係同一個 API，兩種語言實現（見工可以講）
 
 const express = require("express");
+const cors = require("cors");
 const { Pool } = require("pg");
 
 const app = express();
+app.use(cors()); // 俾 browser 版（Expo web）跨域打 API；React Native 本身唔理 CORS
 app.use(express.json()); // 讀 POST 嘅 JSON body
 
 const PORT = process.env.PORT || 3000;
