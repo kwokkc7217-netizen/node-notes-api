@@ -1,12 +1,12 @@
 // mobile/App.js — Expo React Native client for node-notes-api
 // 對應 Hutchison 技能：React Native、REST API 串接
-// Backend: https://node-notes-api-3p1r.onrender.com （Express + Postgres）
+// Backend: https://node-notes-api-2he1.onrender.com （Express + Postgres）
 
 import { useCallback, useEffect, useState } from "react";
 import {
   ActivityIndicator,
-  Alert,
   FlatList,
+  Modal,
   StyleSheet,
   Text,
   TextInput,
@@ -24,6 +24,7 @@ export default function App() {
   const [refreshing, setRefreshing] = useState(false); // 下拉 refresh
   const [hello, setHello] = useState(""); // /api/hello 狀態
   const [error, setError] = useState("");
+  const [deletingId, setDeletingId] = useState(null); // 等緊 confirm 嘅 note id（Modal 用，Alert 喺 web 版係空 function）
 
   // ---- API calls ----
   async function loadNotes() {
@@ -74,14 +75,7 @@ export default function App() {
   }
 
   function confirmDelete(id) {
-    Alert.alert("刪除", "確定刪除呢條 note？", [
-      { text: "取消", style: "cancel" },
-      {
-        text: "刪除",
-        style: "destructive",
-        onPress: () => deleteNote(id),
-      },
-    ]);
+    setDeletingId(id); // 開 Modal confirm（唔用 Alert.alert：react-native-web 嗰個係空 function，web 版撳落去會無反應）
   }
 
   async function deleteNote(id) {
@@ -92,6 +86,8 @@ export default function App() {
       setNotes((prev) => prev.filter((n) => n.id !== id));
     } catch (e) {
       setError(e.message);
+    } finally {
+      setDeletingId(null);
     }
   }
 
@@ -142,6 +138,29 @@ export default function App() {
         )}
       />
       <StatusBar style="auto" />
+
+      <Modal visible={deletingId !== null} transparent animationType="fade">
+        <View style={styles.modalBg}>
+          <View style={styles.modalBox}>
+            <Text style={styles.modalTitle}>刪除</Text>
+            <Text style={styles.modalMsg}>確定刪除呢條 note？</Text>
+            <View style={styles.modalRow}>
+              <TouchableOpacity
+                style={[styles.modalBtn, styles.modalCancel]}
+                onPress={() => setDeletingId(null)}
+              >
+                <Text>取消</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.modalBtn, styles.modalOk]}
+                onPress={() => deleteNote(deletingId)}
+              >
+                <Text style={styles.modalOkText}>刪除</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -184,4 +203,18 @@ const styles = StyleSheet.create({
   },
   noteText: { flex: 1, fontSize: 16, marginRight: 8 },
   del: { color: "#c00", fontSize: 14 },
+  modalBg: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.4)",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  modalBox: { backgroundColor: "#fff", borderRadius: 12, padding: 20, width: 280 },
+  modalTitle: { fontSize: 18, fontWeight: "bold", marginBottom: 8 },
+  modalMsg: { fontSize: 15, marginBottom: 16 },
+  modalRow: { flexDirection: "row", justifyContent: "flex-end" },
+  modalBtn: { paddingHorizontal: 16, paddingVertical: 8, borderRadius: 8, marginLeft: 8 },
+  modalCancel: { backgroundColor: "#eee" },
+  modalOk: { backgroundColor: "#c00" },
+  modalOkText: { color: "#fff" },
 });
